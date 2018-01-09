@@ -191,6 +191,7 @@ var createScene = function() {
 
             // the canvas/window resize event handler
             window.addEventListener('resize', function(){
+                forceRerender = true;
                 engine.resize();
             });
         });

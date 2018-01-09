@@ -49,7 +49,6 @@
             engine.loadingScreen = {
                 // Custom loading screen usage: https://github.com/BabylonJS/Babylon.js/blob/master/src/Loading/babylon.loadingScreen.ts#L21
                 displayLoadingUI: () => {
-                    console.log('loading',arguments)
                     this._loadingDiv = document.createElement('div');
                     this._loadingDiv.id = 'customBabylonLoadingScreen';
                     this._loadingTextDiv = document.createElement('div');
@@ -109,7 +108,7 @@ var createScene = function() {
     // sphere.position.y = -1.3;
     // sphere.material = pbr;
 
-    // Hemispheric light is like sunlight.
+    // Hemispheric light is like sunlight. Rays are parallel
     // Vector is x,y,z. For directly above us, just do 0,5,0
     // Positive y is above us.
     // Positive z is behind us. Negative z is in front of us.
@@ -117,31 +116,49 @@ var createScene = function() {
     var sun = new BABYLON.HemisphericLight('sun', new BABYLON.Vector3(5,5,5), scene);
     sun.intensity = 0.5;
 
+    var groundLight = new BABYLON.HemisphericLight('groundLight', new BABYLON.Vector3(0,-5,0), scene);
+    groundLight.intensity = 0.125;
+
     // This point light is like the sun except it's wider and softer
     var softSun = new BABYLON.PointLight("softSun", new BABYLON.Vector3(80,80,80), scene);
     softSun.intensity = 4000;
     softSun.radius = 30;
 
-    var meshes;
+    var helmetmeshes;
+    var bottleMeshes;
     var loader = new BABYLON.AssetsManager(scene);
     var item = loader.addMeshTask("item", "", "/assets/", "DamagedHelmet.gltf");
     item.onSuccess = function(task) {
-        meshes = task.loadedMeshes;
+        helmetmeshes = task.loadedMeshes;
 
         // Some 3d editors have negative scaling ... so we have to un-negative it
-        // meshes[1].scaling.y = -5;
-        // meshes[1].scaling.x = -5;
-        // meshes[1].scaling.z = 5;
-        meshes[1].rotation.z = 3.141;
-        meshes[1].material.reflectionTexture = meadowCubeTexture;
+        // helmetmeshes[1].scaling.y = -5;
+        // helmetmeshes[1].scaling.x = -5;
+        // helmetmeshes[1].scaling.z = 5;
+        helmetmeshes[1].rotation.z = 3.141;
+        helmetmeshes[1].position.x = 0;
+        helmetmeshes[1].material.reflectionTexture = meadowCubeTexture;
+        forceRerender = true;
+    }
+
+    loader.addMeshTask("item2", "", "/assets/", "WaterBottle.gltf").onSuccess = function(task) {
+        bottleMeshes = task.loadedMeshes;
+
+        // Some 3d editors have negative scaling ... so we have to un-negative it
+        bottleMeshes[1].scaling.y = -5;
+        bottleMeshes[1].scaling.x = -5;
+        bottleMeshes[1].scaling.z = 5;
+        bottleMeshes[1].rotation.z = 3.141;
+        bottleMeshes[1].position.x = -1.2;
+        bottleMeshes[1].material.reflectionTexture = meadowCubeTexture;
         forceRerender = true;
     }
 
     loader.load();
 
     scene.registerBeforeRender(function () {
-        if (meshes) {
-            // meshes[0].rotation.x += 0.01;
+        if (bottleMeshes) {
+            bottleMeshes[1].rotation.y += 0.05;
         }
     });
 

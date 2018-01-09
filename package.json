@@ -1,0 +1,24 @@
+{
+  "name": "tau-render",
+  "version": "1.0.0",
+  "description": "## Installation: Install http-server to serve the files ```sh npm install -g http-server ```",
+  "main": "renderImage.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/irisli/tau-render.git"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/irisli/tau-render/issues"
+  },
+  "homepage": "https://github.com/irisli/tau-render#readme",
+  "dependencies": {
+    "http-server": "^0.10.0",
+    "puppeteer": "^0.13.0",
+    "sharp": "^0.18.4"
+  }
+}

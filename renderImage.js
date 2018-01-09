@@ -34,7 +34,7 @@ httpServer.stderr.on( 'data', data => {
 
 httpServer.on( 'close', code => {
   console.log( `child process exited with code ${code}` );
-} );
+});
 
 process.on('exit', function() {
   httpServer.kill();
@@ -109,4 +109,3 @@ function puppeteerRender() {
     }
   })();
 }
-

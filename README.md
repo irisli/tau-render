@@ -9,3 +9,12 @@ npm install -g http-server
 ```sh
 http-server
 ```
+
+## Rendering
+```sh
+npm install
+```
+
+```sh
+node renderImage.js item
+```

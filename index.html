@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
-    <title>Babylon - Getting Started</title>
+    <title>Tau render</title>
     <!--- link to the last version of babylon - -->
 
     <script src="./babylon.custom.withglTF.js"></script>
@@ -29,6 +29,9 @@
             top: 0;
             left: 0;
         }
+        #BabylonFinishedIndicator {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -38,11 +41,18 @@
             // get the canvas DOM element
             var canvas = document.getElementById('renderCanvas');
 
+            let pixelRatioLimit = 2;
+            if (window.location.hash.indexOf('pixelRatioLimit1') !== -1) {
+                // Usage: https://blah.com/render.html/#anythingpixelRatioLimit1anythingelse
+                pixelRatioLimit = 1;
+                window.a = true
+            }
+
             // load the 3D engine
             var engine = new BABYLON.Engine(canvas, true, {
-              limitDeviceRatio: 3,
+              limitDeviceRatio: pixelRatioLimit,
             }, true); // canvas, antialias, opts, adaptToDeviceRatio
-            engine.setHardwareScalingLevel(0.5); // Uncomment for MEGA resolution on devices with pixel ratio 1
+            // engine.setHardwareScalingLevel(0.5); // Uncomment for MEGA resolution on devices with pixel ratio 1
 
             let forceRerender = true;
 
@@ -58,6 +68,9 @@
                 },
                 hideLoadingUI: () => {
                     document.body.removeChild(this._loadingDiv);
+                    this._finishedIndicator = document.createElement('div');
+                    this._finishedIndicator.id = 'BabylonFinishedIndicator';
+                    document.body.appendChild(this._finishedIndicator);
                 }
             };
 
@@ -66,7 +79,11 @@ var createScene = function() {
     scene.clearColor = new BABYLON.Color3(1, 1, 1);
     scene.clearColor = new BABYLON.Color3(0.96875, 0.96875, 0.96875); // Uncomment for gray
     scene.ambientColor = new BABYLON.Color3(0.5,1,1);
-    scene.debugLayer.show();
+    // scene.debugLayer.show();
+
+    // Background under CC0 license: https://wallpaper.wiki/aluminum-background-download-free.html/wallpaper-wiki-full-hd-aluminum-image-pic-wpc0013331
+    var background = new BABYLON.Layer("back", "/assets/background.jpg", scene);
+    background.isBackground = true;
 
     var camera = new BABYLON.ArcRotateCamera("Camera", 0, 0, 0, BABYLON.Vector3.Zero(), scene);
     window.camera = camera; // For debugging
@@ -182,7 +199,7 @@ var createScene = function() {
                     Math.abs(cam.inertialAlphaOffset) > 0 ||
                     Math.abs(cam.inertialBetaOffset) > 0) {
                     forceRerender = false;
-                    frameCooldown = 5;
+                    frameCooldown = 2;
                     scene.render();
                 }
             }
